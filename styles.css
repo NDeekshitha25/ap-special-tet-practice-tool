@@ -299,30 +299,28 @@ select.app-select:focus {
   overflow: hidden;
 }
 
-/* Elegant APUS Watermark */
-.q-card::before {
+/* Continuous Seamless APUS Watermark Overlay */
+.q-card::after {
   content: 'APUS';
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-22deg);
-  font-size: 140px;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  font-size: 130px;
   font-weight: 900;
-  letter-spacing: 20px;
-  color: rgba(30, 64, 175, 0.05);
+  letter-spacing: 18px;
+  color: #1e40af;
+  opacity: 0.055;
   pointer-events: none;
   user-select: none;
-  z-index: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  z-index: 15;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  white-space: nowrap;
 }
 
-[data-theme="dark"] .q-card::before {
-  color: rgba(255, 255, 255, 0.035);
-}
-
-.q-meta, .passage-box, .q-en, .q-te, .options-grid, .expl-card, .nav-row {
-  position: relative;
-  z-index: 1;
+[data-theme="dark"] .q-card::after {
+  color: #93c5fd;
+  opacity: 0.045;
 }
 
 .q-meta {
