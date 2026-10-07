@@ -66,35 +66,6 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Fixed Top APUS Banner */
-.apus-fixed-bar {
-  background: linear-gradient(90deg, #091026, #1e3a8a 50%, #091026);
-  color: #ffffff;
-  text-align: center;
-  padding: 5px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-[data-theme="dark"] .apus-fixed-bar {
-  background: linear-gradient(90deg, #020617, #0f172a 50%, #020617);
-  border-bottom: 1px solid #1e293b;
-}
-
-.apus-fixed-text {
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, #ffffff 30%, #93c5fd);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-
 /* Header */
 .app-header {
   background: var(--header-bg);
@@ -325,6 +296,33 @@ select.app-select:focus {
   flex-direction: column;
   gap: 14px;
   position: relative;
+  overflow: hidden;
+}
+
+/* Elegant APUS Watermark */
+.q-card::before {
+  content: 'APUS';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-22deg);
+  font-size: 140px;
+  font-weight: 900;
+  letter-spacing: 20px;
+  color: rgba(30, 64, 175, 0.05);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+[data-theme="dark"] .q-card::before {
+  color: rgba(255, 255, 255, 0.035);
+}
+
+.q-meta, .passage-box, .q-en, .q-te, .options-grid, .expl-card, .nav-row {
+  position: relative;
+  z-index: 1;
 }
 
 .q-meta {
