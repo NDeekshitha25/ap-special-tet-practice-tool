@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="te" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AP Special TET 2026 - Official Question Bank Practice Tool</title>
+  <meta name="description" content="AP Special TET 2026 Paper II(A) & Paper II(B) SCERT Official Practice Tool with 2,970 Questions, Answers and Bilingual Explanations in English & Telugu.">
+  <meta name="theme-color" content="#1e40af">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Preload Manifest and Datasets for Instant Offline Execution -->
+  <script src="data/manifest.js"></script>
+  <script src="data/cdp.js"></script>
+  <script src="data/telugu.js"></script>
+  <script src="data/english.js"></script>
+  <script src="data/maths.js"></script>
+  <script src="data/physics.js"></script>
+  <script src="data/biology.js"></script>
+  <script src="data/special_education.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo-group">
+        <div class="logo-badge">TET</div>
+        <div class="brand-text">
+          <h1>AP Special TET 2026</h1>
+          <span>SCERT Official Practice Tool (Paper 2A &amp; 2B)</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="searchBtn" class="btn-icon" title="Search Questions" aria-label="Search">🔍</button>
+        <button id="paletteToggleBtn" class="btn-icon" title="Toggle Question Palette" aria-label="Palette">📑</button>
+        <button id="resetBtn" class="btn-icon" title="Reset Progress" aria-label="Reset">🔄</button>
+        <button id="themeToggleBtn" class="btn-icon" title="Toggle Dark/Light Mode" aria-label="Theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Control Bar -->
+  <section class="control-bar">
+    <div class="control-inner">
+      <div class="select-group">
+        <select id="subjectSelect" class="app-select" title="Choose Subject"></select>
+        <select id="rangeSelect" class="app-select" title="Choose Question Range"></select>
+      </div>
+
+      <div class="toggle-group">
+        <button id="modePracticeBtn" class="toggle-btn active" type="button">Practice Mode</button>
+        <button id="modeTestBtn" class="toggle-btn" type="button">Mock Test Mode</button>
+      </div>
+
+      <div class="select-group">
+        <select id="langSelect" class="app-select" title="Display Language">
+          <option value="both">🌐 Bilingual (English &amp; తెలుగు)</option>
+          <option value="te">తెలుగు (Telugu Only)</option>
+          <option value="en">English (English Only)</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Ribbon -->
+  <section class="stats-ribbon">
+    <div class="stats-inner">
+      <div class="stats-items">
+        <div class="stat-item">
+          <span>Attempted:</span>
+          <strong id="statAttempted">0 / 630</strong>
+        </div>
+        <div class="stat-item correct">
+          <span>✔ Correct:</span>
+          <strong id="statCorrect">0</strong>
+        </div>
+        <div class="stat-item wrong">
+          <span>✗ Wrong:</span>
+          <strong id="statWrong">0</strong>
+        </div>
+        <div class="stat-item score">
+          <span>Score:</span>
+          <strong id="statScore">0 pts</strong>
+        </div>
+        <div id="testTimerPill" class="stat-item" style="display: none; color: #d97706;">
+          <span>⏱ Time:</span>
+          <strong id="testTimerText">00:00</strong>
+        </div>
+      </div>
+      <div class="progress-container" title="Overall Progress">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Question Layout -->
+  <main id="mainWrapper" class="main-wrapper sidebar-open">
+    
+    <!-- Question Card -->
+    <article id="qCard" class="q-card">
+      <div class="q-meta">
+        <div class="q-badge-row">
+          <span id="qBadge" class="q-badge">Q. 1</span>
+          <span id="subTag" class="sub-tag">CDP</span>
+        </div>
+        <div class="q-tools">
+          <button id="starBtn" class="star-btn" title="Bookmark for Revision">☆</button>
+        </div>
+      </div>
+
+      <!-- Passage / Reading Comprehension (if applicable) -->
+      <div id="passageBox" class="passage-box" style="display: none;"></div>
+
+      <!-- Question Text -->
+      <div id="qEn" class="q-en"></div>
+      <div id="qTe" class="q-te"></div>
+
+      <!-- Options Grid -->
+      <div id="optionsGrid" class="options-grid"></div>
+
+      <!-- Explanation Card -->
+      <div id="explCard" class="expl-card" style="display: none;">
+        <div class="expl-title">💡 Explanation &amp; Key Concept / వివరణ:</div>
+        <div id="explEn" class="expl-en"></div>
+        <div id="explTe" class="expl-te"></div>
+      </div>
+
+      <!-- Bottom Navigation Row -->
+      <div class="nav-row">
+        <button id="prevBtn" class="btn-nav" type="button">◀ Previous</button>
+        <button id="clearBtn" class="btn-nav" type="button" disabled>Clear</button>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">Jump to:</span>
+          <input type="number" id="jumpInput" min="1" style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; text-align: center; background: var(--bg); color: var(--text-main);">
+        </div>
+        <button id="submitTestBtn" class="btn-nav primary" type="button" style="display: none; background: #059669; border-color: #059669;">Finish Test 🏁</button>
+        <button id="nextBtn" class="btn-nav primary" type="button">Next ▶</button>
+      </div>
+    </article>
+
+    <!-- Sidebar Palette -->
+    <aside id="sidebar" class="sidebar">
+      <div class="palette-head">
+        <span>Question Palette</span>
+        <span id="paletteCount" style="font-size: 12px; color: var(--primary);">1 of 630</span>
+      </div>
+
+      <div class="palette-filters">
+        <button class="filter-chip active" data-filter="all" type="button">All</button>
+        <button class="filter-chip" data-filter="unanswered" type="button">Unanswered</button>
+        <button class="filter-chip" data-filter="correct" type="button">Correct</button>
+        <button class="filter-chip" data-filter="wrong" type="button">Wrong</button>
+        <button class="filter-chip" data-filter="bookmarked" type="button">★ Saved</button>
+      </div>
+
+      <div id="paletteGrid" class="palette-grid"></div>
+    </aside>
+
+  </main>
+
+  <!-- Modal Container -->
+  <div id="modalContainer" style="display: none;"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

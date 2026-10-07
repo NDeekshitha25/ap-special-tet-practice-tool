@@ -1,0 +1,51 @@
+window.TET_MANIFEST = [
+  {
+    "id": "cdp",
+    "name_en": "Child Development & Pedagogy (CDP)",
+    "name_te": "శిశు వికాసం మరియు పెడగాజి",
+    "count": 630,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "telugu",
+    "name_en": "Telugu (తెలుగు)",
+    "name_te": "తెలుగు",
+    "count": 630,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "english",
+    "name_en": "English",
+    "name_te": "ఇంగ్లీష్",
+    "count": 720,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "maths",
+    "name_en": "Mathematics",
+    "name_te": "గణితం",
+    "count": 240,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "physics",
+    "name_en": "Physical Science",
+    "name_te": "భౌతిక రసాయన శాస్త్రాలు",
+    "count": 240,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "biology",
+    "name_en": "Biological Science",
+    "name_te": "జీవ శాస్త్రం",
+    "count": 240,
+    "paper": "Paper II(A)"
+  },
+  {
+    "id": "special_education",
+    "name_en": "Special Education (Paper 2B)",
+    "name_te": "విశేష విద్య (పేపర్ 2B)",
+    "count": 270,
+    "paper": "Paper II(B)"
+  }
+];
