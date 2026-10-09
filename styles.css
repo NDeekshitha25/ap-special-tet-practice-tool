@@ -751,3 +751,108 @@ select.app-select:focus {
   .opt-btn { padding: 10px 12px; font-size: 13.5px; }
   .btn-nav { padding: 8px 14px; font-size: 12.5px; }
 }
+
+/* ==========================================================================
+   Rich Content Styling: Math Fractions, Tables, Superscripts & Typography
+   ========================================================================== */
+
+/* Math Fractions */
+.fr {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 0.3em;
+  line-height: 1.15;
+  font-size: 0.95em;
+  font-weight: 700;
+}
+.fr .nu {
+  border-bottom: 1.8px solid currentColor;
+  padding: 0 0.35em 2px;
+}
+.fr .de {
+  padding: 2px 0.35em 0;
+}
+
+/* Superscript and Subscript */
+sup {
+  vertical-align: super;
+  font-size: 0.75em;
+  line-height: 0;
+}
+sub {
+  vertical-align: sub;
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+/* Match Tables (Biology & Pedagogy) */
+table.mt,
+.passage-box table,
+.q-en table,
+.q-te table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  width: 100%;
+  max-width: 620px;
+  font-size: 13.5px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+table.mt td,
+table.mt th,
+.passage-box td,
+.passage-box th,
+.q-en td,
+.q-en th,
+.q-te td,
+.q-te th {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+table.mt tr:first-child th:empty,
+table.mt tr:first-child th {
+  display: none;
+}
+.passage-box table th {
+  background: rgba(30, 64, 175, 0.08);
+  font-weight: 700;
+}
+
+/* Question Typography & Instructions */
+.q-en b, .q-en strong,
+.q-te b, .q-te strong {
+  color: var(--primary);
+  font-weight: 800;
+}
+.q-en i, .q-en em,
+.q-te i, .q-te em {
+  font-style: italic;
+  color: inherit;
+}
+
+/* Dark mode adjustments for rich content */
+[data-theme="dark"] table.mt,
+[data-theme="dark"] .passage-box table,
+[data-theme="dark"] .q-en table,
+[data-theme="dark"] .q-te table {
+  background: #1e293b;
+  border-color: #334155;
+}
+[data-theme="dark"] table.mt td,
+[data-theme="dark"] .passage-box td,
+[data-theme="dark"] .q-en td,
+[data-theme="dark"] .q-te td {
+  border-color: #334155;
+}
+[data-theme="dark"] .q-en b,
+[data-theme="dark"] .q-en strong,
+[data-theme="dark"] .q-te b,
+[data-theme="dark"] .q-te strong {
+  color: #60a5fa;
+}

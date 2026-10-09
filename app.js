@@ -96,6 +96,18 @@
     } catch (e) {
       console.warn('LocalStorage error', e);
     }
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlSub = params.get('sub');
+      const urlQ = parseInt(params.get('q'), 10);
+      if (urlSub && state.manifest.some(m => m.id === urlSub)) {
+        state.currentSubId = urlSub;
+      }
+      if (urlQ && !isNaN(urlQ)) {
+        state.initialTargetQ = urlQ;
+      }
+    } catch (_) {}
   }
 
   function saveStorage() {
@@ -160,7 +172,17 @@
     }
 
     populateRangeSelect();
-    state.currentIndex = 0;
+    if (state.initialTargetQ) {
+      const targetIdx = state.questions.findIndex(q => q.id === state.initialTargetQ);
+      if (targetIdx !== -1) {
+        state.currentIndex = targetIdx;
+      } else {
+        state.currentIndex = 0;
+      }
+      state.initialTargetQ = null;
+    } else {
+      state.currentIndex = 0;
+    }
     renderAll();
   }
 
@@ -282,9 +304,10 @@
     // Passage / Comprehension
     if (q.passage && q.passage.trim().length > 0) {
       el.passageBox.style.display = 'block';
-      el.passageBox.textContent = q.passage;
+      el.passageBox.innerHTML = formatRichText(q.passage);
     } else {
       el.passageBox.style.display = 'none';
+      el.passageBox.innerHTML = '';
     }
 
     // Language display
@@ -299,8 +322,8 @@
       el.qTe.style.display = q.q_te ? 'block' : 'none';
     }
 
-    el.qEn.textContent = q.q_en || '';
-    el.qTe.textContent = q.q_te || '';
+    el.qEn.innerHTML = formatRichText(q.q_en || '');
+    el.qTe.innerHTML = formatRichText(q.q_te || '');
 
     // Options
     el.optionsGrid.innerHTML = '';
@@ -332,14 +355,14 @@
       // Bilingual option text
       let bodyHtml = '';
       if (state.lang === 'en') {
-        bodyHtml = `<div class="opt-en">${escapeHtml(opt.en)}</div>`;
+        bodyHtml = `<div class="opt-en">${formatRichText(opt.en)}</div>`;
       } else if (state.lang === 'te') {
-        bodyHtml = `<div class="opt-en">${escapeHtml(opt.te || opt.en)}</div>`;
+        bodyHtml = `<div class="opt-en">${formatRichText(opt.te || opt.en)}</div>`;
       } else {
         if (opt.te && opt.te !== opt.en) {
-          bodyHtml = `<div class="opt-en">${escapeHtml(opt.en)}</div><div class="opt-te">${escapeHtml(opt.te)}</div>`;
+          bodyHtml = `<div class="opt-en">${formatRichText(opt.en)}</div><div class="opt-te">${formatRichText(opt.te)}</div>`;
         } else {
-          bodyHtml = `<div class="opt-en">${escapeHtml(opt.en)}</div>`;
+          bodyHtml = `<div class="opt-en">${formatRichText(opt.en)}</div>`;
         }
       }
 
@@ -356,10 +379,12 @@
     // Explanation Card
     if (state.mode === 'practice' && currentAnswer) {
       el.explCard.style.display = 'flex';
-      el.explEn.innerHTML = q.exp_en ? `<strong>English:</strong> ${q.exp_en}` : '';
-      el.explTe.innerHTML = q.exp_te ? `<strong>వివరణ (తెలుగు):</strong> ${q.exp_te}` : '';
+      el.explEn.innerHTML = q.exp_en ? `<strong>English:</strong> ${formatRichText(q.exp_en)}` : '';
+      el.explTe.innerHTML = q.exp_te ? `<strong>వివరణ (తెలుగు):</strong> ${formatRichText(q.exp_te)}` : '';
     } else {
       el.explCard.style.display = 'none';
+      el.explEn.innerHTML = '';
+      el.explTe.innerHTML = '';
     }
 
     // Prev / Next button states
@@ -655,7 +680,7 @@
         resultsContainer.innerHTML = matches.map(m => `
           <div class="search-item" data-id="${m.id}" style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; background: var(--card-bg);">
             <div style="font-weight: 800; color: var(--primary); font-size: 12px;">Q. ${m.id}</div>
-            <div style="font-size: 13.5px; font-weight: 600; margin-top: 2px;">${escapeHtml(m.q_en || m.q_te)}</div>
+            <div style="font-size: 13.5px; font-weight: 600; margin-top: 2px;">${escapeHtml(stripHtml(m.q_en || m.q_te))}</div>
           </div>
         `).join('');
 
@@ -726,6 +751,25 @@
   function updateTheme() {
     document.documentElement.setAttribute('data-theme', state.theme);
     el.themeToggleBtn.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  function formatRichText(str) {
+    if (!str) return '';
+    let s = String(str).trim();
+    // Normalize newlines
+    s = s.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    // If text does not contain block HTML tags, convert newlines to <br>
+    if (!/<(?:table|tr|td|th|div|p|ul|ol|li)\b/i.test(s)) {
+      s = s.replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
+    }
+    return s;
+  }
+
+  function stripHtml(str) {
+    if (!str) return '';
+    const tmp = document.createElement('div');
+    tmp.innerHTML = str;
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
   }
 
   function escapeHtml(str) {
