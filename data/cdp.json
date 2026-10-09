@@ -4848,7 +4848,7 @@
     "sec": "ప్రజ్ఞ | Intelligence",
     "passage": "",
     "q_en": "A: IQ = (MA / CA) × 100\nB: IQ = (CA / MA) × 100",
-    "q_te": "",
+    "q_te": "A: IQ = (MA / CA) × 100\nB: IQ = (CA / MA) × 100\nసరైన ప్రవచనాన్ని గుర్తించండి.",
     "opts": [
       {
         "en": "Only A is correct",
@@ -14368,7 +14368,7 @@
     "sec": "విద్యా విధానాలు (NEP, NCF, RTE) | Education Policies",
     "passage": "",
     "q_en": "NCTE",
-    "q_te": "",
+    "q_te": "NCTE పూర్తి విస్తరణ రూపం",
     "opts": [
       {
         "en": "National Committee on Teacher Education",
@@ -14592,7 +14592,7 @@
     "sec": "విద్యా విధానాలు (NEP, NCF, RTE) | Education Policies",
     "passage": "",
     "q_en": "DIKSHA means",
-    "q_te": "",
+    "q_te": "DIKSHA అనగా",
     "opts": [
       {
         "en": "Directorate of Information for Knowledge Sharing",

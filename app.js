@@ -320,20 +320,36 @@
       el.passageBox.innerHTML = '';
     }
 
-    // Language display
+    // Language display with intelligent fallbacks
+    const hasEn = Boolean(q.q_en && q.q_en.trim().length > 0);
+    const hasTe = Boolean(q.q_te && q.q_te.trim().length > 0);
+
     if (state.lang === 'en') {
-      el.qEn.style.display = q.q_en ? 'block' : 'none';
+      el.qEn.style.display = hasEn ? 'block' : (hasTe ? 'block' : 'none');
       el.qTe.style.display = 'none';
+      if (!hasEn && hasTe) el.qEn.innerHTML = formatRichText(q.q_te);
+      else el.qEn.innerHTML = formatRichText(q.q_en || '');
     } else if (state.lang === 'te') {
       el.qEn.style.display = 'none';
-      el.qTe.style.display = q.q_te ? 'block' : 'none';
+      el.qTe.style.display = hasTe ? 'block' : (hasEn ? 'block' : 'none');
+      if (!hasTe && hasEn) el.qTe.innerHTML = formatRichText(q.q_en);
+      else el.qTe.innerHTML = formatRichText(q.q_te || '');
     } else {
-      el.qEn.style.display = q.q_en ? 'block' : 'none';
-      el.qTe.style.display = q.q_te ? 'block' : 'none';
-    }
+      // Both
+      el.qEn.style.display = hasEn ? 'block' : 'none';
+      el.qEn.innerHTML = formatRichText(q.q_en || '');
 
-    el.qEn.innerHTML = formatRichText(q.q_en || '');
-    el.qTe.innerHTML = formatRichText(q.q_te || '');
+      if (hasTe && q.q_te !== q.q_en) {
+        el.qTe.style.display = 'block';
+        el.qTe.innerHTML = formatRichText(q.q_te);
+      } else if (!hasEn && hasTe) {
+        el.qTe.style.display = 'block';
+        el.qTe.innerHTML = formatRichText(q.q_te);
+      } else {
+        el.qTe.style.display = 'none';
+        el.qTe.innerHTML = '';
+      }
+    }
 
     // Options
     el.optionsGrid.innerHTML = '';
@@ -763,6 +779,56 @@
     el.themeToggleBtn.textContent = state.theme === 'dark' ? '☀️' : '🌙';
   }
 
+  function renderLatex(str) {
+    if (!str) return '';
+    const s = String(str);
+    if (!s.includes('$')) return s;
+
+    return s.split(/(\$\$[\s\S]+?\$\$|\$[^$]+?\$)/g).map(part => {
+      if (part.startsWith('$$') && part.endsWith('$$')) {
+        const math = part.slice(2, -2).trim();
+        if (window.katex && typeof window.katex.renderToString === 'function') {
+          try {
+            return window.katex.renderToString(math, { displayMode: true, throwOnError: false });
+          } catch (_) {}
+        }
+        return `<div class="math-display">${renderFallbackMath(math)}</div>`;
+      } else if (part.startsWith('$') && part.endsWith('$')) {
+        const math = part.slice(1, -1).trim();
+        if (window.katex && typeof window.katex.renderToString === 'function') {
+          try {
+            return window.katex.renderToString(math, { displayMode: false, throwOnError: false });
+          } catch (_) {}
+        }
+        return `<span class="math-inline">${renderFallbackMath(math)}</span>`;
+      }
+      return part;
+    }).join('');
+  }
+
+  function renderFallbackMath(math) {
+    let m = math;
+    m = m.replace(/\\d?frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="fr"><span class="nu">$1</span><span class="de">$2</span></span>');
+    m = m.replace(/\\sqrt\[(\d+)\]\{([^{}]+)\}/g, '<sup style="font-size:0.75em;">$1</sup>&radic;<span style="border-top:1.5px solid currentColor;padding-top:1px;margin-left:1px;">$2</span>');
+    m = m.replace(/\\sqrt\{([^{}]+)\}/g, '&radic;<span style="border-top:1.5px solid currentColor;padding-top:1px;margin-left:1px;">$1</span>');
+    m = m.replace(/\\sqrt\s*([0-9a-zA-Z]+)/g, '&radic;<span style="border-top:1.5px solid currentColor;padding-top:1px;margin-left:1px;">$1</span>');
+    m = m.replace(/\\times/g, '&times;');
+    m = m.replace(/\\div/g, '&divide;');
+    m = m.replace(/\\pm/g, '&plusmn;');
+    m = m.replace(/\\approx/g, '&asymp;');
+    m = m.replace(/\\pi/g, '&pi;');
+    m = m.replace(/\\theta/g, '&theta;');
+    m = m.replace(/\\circ/g, '&deg;');
+    m = m.replace(/\\ldots/g, '&hellip;');
+    m = m.replace(/\\cdot/g, '&bull;');
+    m = m.replace(/\\text\{([^{}]+)\}/g, '$1');
+    m = m.replace(/\^\{([^{}]+)\}/g, '<sup>$1</sup>');
+    m = m.replace(/\^([0-9a-zA-Z]+)/g, '<sup>$1</sup>');
+    m = m.replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>');
+    m = m.replace(/_([0-9a-zA-Z]+)/g, '<sub>$1</sub>');
+    return m;
+  }
+
   function formatRichText(str) {
     if (!str) return '';
     let s = String(str).trim();
@@ -772,6 +838,8 @@
     if (!/<(?:table|tr|td|th|div|p|ul|ol|li)\b/i.test(s)) {
       s = s.replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
     }
+    // Render LaTeX Math formulas ($...$ or $$...$$) AFTER newlines to preserve SVG paths
+    s = renderLatex(s);
     return s;
   }
 
