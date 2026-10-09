@@ -313,7 +313,7 @@ select.app-select:focus {
   opacity: 0.055;
   pointer-events: none;
   user-select: none;
-  z-index: 15;
+  z-index: 1;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   white-space: nowrap;
 }
@@ -321,6 +321,17 @@ select.app-select:focus {
 [data-theme="dark"] .q-card::after {
   color: #93c5fd;
   opacity: 0.045;
+}
+
+.q-meta,
+.passage-box,
+.q-en,
+.q-te,
+.options-grid,
+.expl-card,
+.nav-row {
+  position: relative;
+  z-index: 2;
 }
 
 .q-meta {
@@ -353,6 +364,21 @@ select.app-select:focus {
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.sec-tag {
+  background: var(--bg);
+  color: var(--text-sub);
+  border: 1px solid var(--border);
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .q-tools {
@@ -512,14 +538,14 @@ select.app-select:focus {
 /* Explanation Box */
 .expl-card {
   background: var(--primary-light);
+  border: 1px solid var(--border);
   border-left: 4px solid var(--primary);
-  border-radius: 0 10px 10px 0;
+  border-radius: 8px;
   padding: 14px 16px;
-  margin-top: 8px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  animation: fadeIn 0.2s ease-in;
 }
 
 .expl-title {

@@ -54,6 +54,7 @@
     qCard: document.getElementById('qCard'),
     qBadge: document.getElementById('qBadge'),
     subTag: document.getElementById('subTag'),
+    secTag: document.getElementById('secTag'),
     starBtn: document.getElementById('starBtn'),
     passageBox: document.getElementById('passageBox'),
     qEn: document.getElementById('qEn'),
@@ -294,6 +295,15 @@
     el.qBadge.textContent = `Q. ${q.id}`;
     const subInfo = state.manifest.find(m => m.id === state.currentSubId);
     el.subTag.textContent = subInfo ? (subInfo.name_te || subInfo.name_en) : state.currentSubId;
+    if (el.secTag) {
+      if (q.sec && q.sec.trim().length > 0) {
+        el.secTag.textContent = q.sec;
+        el.secTag.title = q.sec;
+        el.secTag.style.display = 'inline-block';
+      } else {
+        el.secTag.style.display = 'none';
+      }
+    }
 
     // Bookmark
     const bookmarks = state.bookmarks[state.currentSubId] || [];
